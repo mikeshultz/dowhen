@@ -1,0 +1,9 @@
+[Unit]
+Description=dowhen
+After=doto.service
+
+[Service]
+Type=simple
+User=dowhen
+Group=dowhen
+ExecStart=/usr/bin/python3 -m dowhen daemon
