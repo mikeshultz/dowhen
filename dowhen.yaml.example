@@ -1,0 +1,55 @@
+---
+tick: 15
+triggers:
+  - when: 
+      name: openweathermap.sunrise
+      args:
+        zip: 59801
+    do:
+      # Turn on plant lights
+      - name: wemo.on
+        args:
+          mac: "30:23:03:01:4E:68"
+      - name: wemo.on
+        args:
+          mac: "30:23:03:03:05:CA"
+      - name: wemo.on
+        args:
+          mac: "C0:56:27:B4:53:14"
+
+  - when: 
+      name: openweathermap.sunset
+      args:
+          zip: 59801
+    do:
+      # Turn off plant lights
+      - name: wemo.off
+        args:
+          mac: "30:23:03:01:4E:68"
+      - name: wemo.off
+        args:
+          mac: "30:23:03:03:05:CA"
+      - name: wemo.off
+        args:
+          mac: "C0:56:27:B4:53:14"
+
+      # Turn on living room lights
+      - name: wemo.on
+        args:
+          mac: "30:23:03:02:5D:1C"
+      - name: wemo.on
+        args:
+          mac: "30:23:03:01:16:46"
+
+  - when:
+       name: datetime.time
+       args:
+         when: "01:00:00"
+    do:
+      # Turn off living room lights
+      - name: wemo.off
+        args:
+          mac: "30:23:03:02:5D:1C"
+      - name: wemo.off
+        args:
+          mac: "30:23:03:01:16:46"
