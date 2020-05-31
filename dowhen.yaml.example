@@ -1,5 +1,6 @@
 ---
 tick: 15
+owm_api_key: my-api-key
 triggers:
   - when: 
       name: openweathermap.sunrise
