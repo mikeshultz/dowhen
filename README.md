@@ -54,8 +54,9 @@ Then you can run the daemon:
 
 #### When
 
-"When" modules act as triggers.  They will signal when they should fire. For
-instance, it may fire according to the current time, or weather.
+"When" modules act as triggers.  They will signal when a condition is met. For
+instance, it will indicate the current time, or certain weather conditions have
+occurred.
 
 ##### datetime
 
