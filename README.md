@@ -49,3 +49,39 @@ For instance, to turn on a WeMo switch on sunrise:
 Then you can run the daemon:
 
     dowhen daemon
+
+### Modules
+
+#### When
+
+"When" modules act as triggers.  They will signal when they should fire. For
+instance, it may fire according to the current time, or weather.
+
+##### datetime
+
+The `datetime` When module will trigger on times and dates.
+
+ - daily
+ - hourly
+ - minutely
+ - time(time_string)
+
+##### openweathermap
+
+The `openweathermap` When module triggers on weather-based data.
+
+- sunrise(zip)
+- sunset(zip)
+
+#### Do
+
+"Do" modules perform actions.  For example, the Wemo Do module would do things
+like turn on and off Wemo switches.
+
+##### wemo
+
+The `wemo` Do module performs actions on Belkin Wemo devices.
+
+ - on(mac)
+ - off(mac)
+ - toggle(mac)
