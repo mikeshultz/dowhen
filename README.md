@@ -1,12 +1,27 @@
 # dowhen
 
 A conditional execution system and scheduler.  Pretty much a self-hosted IFTTT.
+There is (currently) no UI.
 
 ## Quickstart
 
 ### Install
 
-    python setup.py install
+#### Generic
+
+    pip3 install --user git+https://github.com/mikeshultz/dowhen.git
+
+#### Production
+
+    useradd dowhen
+    sudo -u dowhen bash
+    pip3 install --user git+https://github.com/mikeshultz/dowhen.git
+
+You may also want to configure a daemon.  You can use the service file in this
+repo as a template.
+
+    # Service file location may be different depending on distro
+    curl -s https://raw.githubusercontent.com/mikeshultz/dowhen/master/ops/systemd/dowhen.service | sudo tee /usr/lib/systemd/system/dowhen-test.service
 
 ### Configure
 
