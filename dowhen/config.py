@@ -18,7 +18,7 @@ def conf_dir():
         raise Exception('File exists where config directory should be!')
 
     if not cd.is_dir():
-        cd.mkdir(mode=0o700)
+        cd.mkdir(mode=0o700, parents=True)
 
     return cd
 
