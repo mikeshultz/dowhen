@@ -44,6 +44,7 @@ def get_forecast(zip=DEFAULT_ZIP, country_code=DEFAULT_COUNTRY_CODE):
         date_string = forecast_list[0].get('dt_txt')
         if date_string is not None:
             FORECAST_CACHE_TIME = parse_owm_date(date_string)
+            log.debug('Set Forecast cache time to {}'.format(FORECAST_CACHE_TIME))
         else:
             log.warn('dt_txt has invalid value or does not exist')
 

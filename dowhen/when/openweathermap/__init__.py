@@ -24,11 +24,21 @@ def sunrise(zip):
 
     # Only trigger this once per day
     if same_day(_LAST_TRIGGERED_DATE.get('sunrise'), now):
+        log.debug('sunrise() already called today')
         return False
 
     _LAST_TRIGGERED_DATE['sunrise'] = now
 
-    return datetime.fromtimestamp(forecast['city']['sunrise']) <= now
+    sunrisedt = datetime.fromtimestamp(forecast['city']['sunrise'])
+
+    log.debug('Expected sunrise at {}'.format(sunrisedt))
+
+    log.debug('{} <= {} == {}'.format(
+        sunrisedt,
+        now,
+        sunrisedt <= now
+    ))
+    return sunrisedt <= now
 
 
 def sunset(zip):
@@ -46,14 +56,30 @@ def sunset(zip):
 
     # Only trigger this once per day
     if same_day(_LAST_TRIGGERED_DATE.get('sunset'), now):
+        log.debug('sunset() already called today')
         return False
 
     _LAST_TRIGGERED_DATE['sunset'] = now
 
-    return (
-        datetime.fromtimestamp(forecast['city']['sunset']) <= now
-        or datetime.fromtimestamp(forecast['city']['sunrise']) >= now
-    )
+    sunrisedt = datetime.fromtimestamp(forecast['city']['sunrise'])
+    sunsetdt = datetime.fromtimestamp(forecast['city']['sunset'])
+
+    log.debug('Expected sunrise at {}'.format(sunrisedt))
+    log.debug('Expected sunset at {}'.format(sunsetdt))
+
+    log.debug('{} <= {} == {}'.format(
+        sunsetdt,
+        now,
+        sunsetdt <= now
+    ))
+    log.debug('{} >= {} == {}'.format(
+        sunrisedt,
+        now,
+        sunrisedt <= now
+    ))
+
+    # Sunset already happened or sunrise has not yet happened
+    return sunsetdt <= now or sunrisedt >= now
 
 
 def precipitating(zip):
