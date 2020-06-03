@@ -1,6 +1,9 @@
 from datetime import datetime
 from dateutil.parser import parse
 from dowhen.common import same_day, same_hour, same_minute
+from dowhen.common.logger import get_logger
+
+log = get_logger(__name__)
 
 _LAST_TRIGGERED_DT = {}
 
@@ -46,11 +49,17 @@ def time(when):
     now = datetime.now()
     key = 'time-{}:{}:{}'.format(dt.hour, dt.minute, dt.second)
 
-    if now >= dt and not same_day(_LAST_TRIGGERED_DT.get(key), now):
-        _LAST_TRIGGERED_DT[key] = now
-        return True
+    if dt > now:
+        log.debug('{} is in the future.'.format(dt))
+        return False
 
-    return False
+    if same_day(_LAST_TRIGGERED_DT.get(key), now):
+        log.debug('datetime.time already fired today.')
+        return False
+
+    _LAST_TRIGGERED_DT[key] = now
+
+    return True
 
 
 CATALOG = {
