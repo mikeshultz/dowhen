@@ -59,7 +59,7 @@ def sunset(zip):
 
     # Only trigger this once per day
     if same_day(_LAST_TRIGGERED_DATE.get('sunset'), now):
-        log.debug('sunset() already triggered today')
+        log.debug('sunset() already fired today')
         return False
 
     sunrisedt = datetime.fromtimestamp(forecast['city']['sunrise'])
