@@ -68,24 +68,11 @@ def sunset(zip):
     log.debug('Expected sunrise at {}'.format(sunrisedt))
     log.debug('Expected sunset at {}'.format(sunsetdt))
 
-    log.debug('{} <= {} == {}'.format(
-        sunsetdt,
-        now,
-        sunsetdt <= now
-    ))
-    log.debug('{} >= {} == {}'.format(
-        sunrisedt,
-        now,
-        sunrisedt <= now
-    ))
-
-    # Sunset already happened or sunrise has not yet happened
-    triggered = sunsetdt <= now or sunrisedt >= now
-
-    if triggered:
+    if sunsetdt <= now:
         _LAST_TRIGGERED_DATE['sunset'] = now
+        return True
 
-    return triggered
+    return False
 
 
 def precipitating(zip):
