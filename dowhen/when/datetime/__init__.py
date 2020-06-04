@@ -54,7 +54,9 @@ def time(when):
         return False
 
     if same_day(_LAST_TRIGGERED_DT.get(key), now):
-        log.debug('datetime.time already fired today.')
+        log.debug('datetime.time already fired today (@ {}).'.format(
+            _LAST_TRIGGERED_DT[key]
+        ))
         return False
 
     _LAST_TRIGGERED_DT[key] = now
