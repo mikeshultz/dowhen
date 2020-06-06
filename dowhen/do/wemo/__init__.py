@@ -27,15 +27,18 @@ CATALOG = {
         'name': 'On',
         'description': on.__doc__,
         'func': on,
+        'stacks': ['off', 'toggle'],
     },
     'off': {
         'name': 'Off',
         'description': off.__doc__,
         'func': off,
+        'stacks': ['on', 'toggle'],
     },
     'toggle': {
         'name': 'Toggle',
         'description': toggle.__doc__,
         'func': toggle,
+        'stacks': ['on', 'off'],
     },
 }

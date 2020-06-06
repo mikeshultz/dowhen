@@ -71,3 +71,11 @@ def same_minute(a, b):
         a.hour == b.hour,
         a.minute == b.minute,
     )
+
+
+def any_in_any(a, b):
+    """ Check if any elements in a are in b """
+    for x in a:
+        if x in b:
+            return True
+    return False
