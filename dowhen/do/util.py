@@ -45,6 +45,16 @@ def load_do(name):
     return catalog[path[1]]
 
 
+def create_call_key(name, args):
+    """ Create a unique identifier for a call from the func name and args of the
+    call """
+    arg_hash = None
+    if args:
+        arg_hash = hash(frozenset(args.items()))
+    key = '{}-{}'.format(name, arg_hash)
+    return key
+
+
 class Scheduler:
     """ This scheduler accepts timed "do" events that came from "when" triggers.
     Its purpose is to remove duplicates and collapse stackable "do" actions.
@@ -88,10 +98,11 @@ class Scheduler:
         new_schedule = []
 
         for item in self.schedule:
-            _, name, _ = item
+            _, name, args = item
             mod, _ = name.split('.')
+            call_key = create_call_key(name, args)
 
-            if name in seen:
+            if call_key in seen:
                 continue
 
             # Get the other functions in the module that "stack" with this one
@@ -99,12 +110,12 @@ class Scheduler:
 
             # If this is stackable with a previously seen item, skip it
             if stacks and any_in_any(
-                ['{}.{}'.format(mod, x) for x in stacks],
+                [create_call_key('{}.{}'.format(mod, x), args) for x in stacks],
                 seen
             ):
                 continue
 
-            seen.append(name)
+            seen.append(call_key)
             new_schedule.append(item)
 
         self.schedule = new_schedule

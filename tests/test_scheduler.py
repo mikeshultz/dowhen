@@ -4,6 +4,9 @@ from dowhen.do.util import Scheduler
 DEVICE_ON = 'wemo.on'
 DEVICE_OFF = 'wemo.off'
 
+DEVICE_ONE = '30:23:03:02:5D:1C'
+DEVICE_TWO = '30:23:03:01:4E:68'
+
 
 def test_scheduler():
     """ Test the Scheduler """
@@ -15,9 +18,9 @@ def test_scheduler():
     three_time = datetime.now() + timedelta(minutes=25)
 
     # These stack, and the final on should prevail
-    s.add(one_time, DEVICE_ON)
-    s.add(two_time, DEVICE_OFF)
-    s.add(three_time, DEVICE_ON)
+    s.add(one_time, DEVICE_ON, {'mac': DEVICE_ONE})
+    s.add(two_time, DEVICE_OFF, {'mac': DEVICE_ONE})
+    s.add(three_time, DEVICE_ON, {'mac': DEVICE_ONE})
 
     schedule = s.finalize()
 

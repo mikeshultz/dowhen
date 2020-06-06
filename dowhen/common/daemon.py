@@ -49,17 +49,22 @@ def run_daemon():
                         trig['when'].get('args')
                     )
 
-                    scheduler.add(trigger_when, trig['do']['name'], trig['do'].get('args'))
+                    for action in trig['do']:
+                        scheduler.add(
+                            trigger_when,
+                            action['name'],
+                            action.get('args')
+                        )
+
+                log.debug('Scheduler has {} actions'.format(
+                    len(scheduler.schedule)
+                ))
 
                 schedule = scheduler.finalize()
 
-                for event in schedule:
-                    if not event.get('do'):
-                        log.warn('Event {} has no action to perform'.format(
-                            event[1]
-                        ))
-                        continue
+                log.debug('Will perform {} actions'.format(len(schedule)))
 
+                for event in schedule:
                     do(event[1], event[2])
 
             except Exception:
