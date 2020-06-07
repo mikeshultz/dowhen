@@ -38,7 +38,7 @@ def run_daemon():
     with config() as conf:
         log.debug('config()')
         while True:
-            log.debug('--tick')
+            log.debug('--tick {}'.format(datetime.now()))
 
             try:
                 triggers = get_triggers()
