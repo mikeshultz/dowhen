@@ -21,7 +21,7 @@ def now_is_same(interval):
         same = same_minute(_LAST_TRIGGERED_DT.get('daily'), now)
 
     if same:
-        return False
+        return None
 
     _LAST_TRIGGERED_DT['daily'] = now
 
@@ -30,17 +30,23 @@ def now_is_same(interval):
 
 def daily():
     """ Triggers every day """
-    return now_is_same('daily')
+    if not now_is_same('daily'):
+        return None
+    return datetime.now()
 
 
 def hourly():
     """ Triggers every hour """
-    return now_is_same('hourly')
+    if not now_is_same('hourly'):
+        return None
+    return datetime.now()
 
 
 def minutely():
     """ Triggers every miniute """
-    return now_is_same('minutely')
+    if not now_is_same('minutely'):
+        return None
+    return datetime.now()
 
 
 def time(when):
@@ -51,17 +57,17 @@ def time(when):
 
     if dt > now:
         log.debug('{} is in the future.'.format(dt))
-        return False
+        return None
 
     if same_day(_LAST_TRIGGERED_DT.get(key), now):
         log.debug('datetime.time already fired today (@ {}).'.format(
             _LAST_TRIGGERED_DT[key]
         ))
-        return False
+        return None
 
     _LAST_TRIGGERED_DT[key] = now
 
-    return True
+    return dt
 
 
 CATALOG = {

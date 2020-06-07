@@ -49,12 +49,13 @@ def run_daemon():
                         trig['when'].get('args')
                     )
 
-                    for action in trig['do']:
-                        scheduler.add(
-                            trigger_when,
-                            action['name'],
-                            action.get('args')
-                        )
+                    if trigger_when:
+                        for action in trig['do']:
+                            scheduler.add(
+                                trigger_when,
+                                action['name'],
+                                action.get('args')
+                            )
 
                 log.debug('Scheduler has {} actions'.format(
                     len(scheduler.schedule)

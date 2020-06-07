@@ -89,7 +89,7 @@ class Scheduler:
         self.schedule.append((when, name, args))
 
     def sort(self):
-        self.schedule = sorted(self.schedule, key=lambda x: x[0], reverse=True)
+        self.schedule = list(sorted(self.schedule, key=lambda x: x[0], reverse=True))
 
     def squash(self):
         self.sort()
@@ -126,6 +126,11 @@ class Scheduler:
         self.squash()
 
         schedule = self.schedule
+
+        log.debug('Finalized Schedule')
+        log.debug('------------------')
+        for item in schedule:
+            log.debug('{} - {}({})'.format(item[0], item[1], item[2]))
 
         self.schedule = []
 

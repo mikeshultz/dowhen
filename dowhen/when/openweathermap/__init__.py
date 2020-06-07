@@ -20,12 +20,12 @@ def sunrise(zip):
         log.error('Unable to get sunrise from forecast for zip: {}'.format(
             zip
         ))
-        return False
+        return None
 
     # Only trigger this once per day
     if same_day(_LAST_TRIGGERED_DATE.get('sunrise'), now):
         log.debug('sunrise() already fired today')
-        return False
+        return None
 
     sunrisedt = datetime.fromtimestamp(forecast['city']['sunrise'])
 
@@ -40,8 +40,9 @@ def sunrise(zip):
 
     if triggered:
         _LAST_TRIGGERED_DATE['sunrise'] = now
+        return sunrisedt
 
-    return triggered
+    return None
 
 
 def sunset(zip):
@@ -55,12 +56,12 @@ def sunset(zip):
         log.error('Unable to get sunset from forecast for zip: {}'.format(
             zip
         ))
-        return False
+        return None
 
     # Only trigger this once per day
     if same_day(_LAST_TRIGGERED_DATE.get('sunset'), now):
         log.debug('sunset() already fired today')
-        return False
+        return None
 
     sunrisedt = datetime.fromtimestamp(forecast['city']['sunrise'])
     sunsetdt = datetime.fromtimestamp(forecast['city']['sunset'])
@@ -70,9 +71,9 @@ def sunset(zip):
 
     if sunsetdt <= now:
         _LAST_TRIGGERED_DATE['sunset'] = now
-        return True
+        return sunsetdt
 
-    return False
+    return None
 
 
 def precipitating(zip):
