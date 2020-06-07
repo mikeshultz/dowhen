@@ -37,9 +37,9 @@ def same_day(a, b):
         return False
 
     return (
-        a.year == b.year,
-        a.month == b.month,
-        a.day == b.day,
+        a.year == b.year
+        and a.month == b.month
+        and a.day == b.day
     )
 
 
@@ -50,10 +50,10 @@ def same_hour(a, b):
         return False
 
     return (
-        a.year == b.year,
-        a.month == b.month,
-        a.day == b.day,
-        a.hour == b.hour,
+        a.year == b.year
+        and a.month == b.month
+        and a.day == b.day
+        and a.hour == b.hour
     )
 
 
@@ -65,11 +65,11 @@ def same_minute(a, b):
         return False
 
     return (
-        a.year == b.year,
-        a.month == b.month,
-        a.day == b.day,
-        a.hour == b.hour,
-        a.minute == b.minute,
+        a.year == b.year
+        and a.month == b.month
+        and a.day == b.day
+        and a.hour == b.hour
+        and a.minute == b.minute
     )
 
 

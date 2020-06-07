@@ -63,7 +63,7 @@ def run_daemon():
 
                 schedule = scheduler.finalize()
 
-                log.debug('Will perform {} actions'.format(len(schedule)))
+                log.info('Will perform {} actions'.format(len(schedule)))
 
                 for event in schedule:
                     do(event[1], event[2])

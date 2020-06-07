@@ -21,11 +21,9 @@ def now_is_same(interval):
         same = same_minute(_LAST_TRIGGERED_DT.get('daily'), now)
 
     if same:
-        return None
+        return True
 
-    _LAST_TRIGGERED_DT['daily'] = now
-
-    return True
+    return False
 
 
 def daily():
