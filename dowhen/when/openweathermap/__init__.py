@@ -13,6 +13,7 @@ def sunrise(zip):
     """ When the sun is up """
     global _LAST_TRIGGERED_DATE
 
+    key = 'sunrise-{}'.format(zip)
     now = datetime.now()
     forecast = get_forecast(zip=zip)
 
@@ -23,7 +24,7 @@ def sunrise(zip):
         return None
 
     # Only trigger this once per day
-    if same_day(_LAST_TRIGGERED_DATE.get('sunrise'), now):
+    if same_day(_LAST_TRIGGERED_DATE.get(key), now):
         log.debug('sunrise() already fired today')
         return None
 
@@ -36,10 +37,9 @@ def sunrise(zip):
         now,
         sunrisedt <= now
     ))
-    triggered = sunrisedt <= now
 
-    if triggered:
-        _LAST_TRIGGERED_DATE['sunrise'] = now
+    if sunrisedt <= now:
+        _LAST_TRIGGERED_DATE[key] = now
         return sunrisedt
 
     return None
@@ -49,6 +49,7 @@ def sunset(zip):
     """ When the sun is down """
     global _LAST_TRIGGERED_DATE
 
+    key = 'sunset-{}'.format(zip)
     now = datetime.now()
     forecast = get_forecast(zip=zip)
 
@@ -59,7 +60,7 @@ def sunset(zip):
         return None
 
     # Only trigger this once per day
-    if same_day(_LAST_TRIGGERED_DATE.get('sunset'), now):
+    if same_day(_LAST_TRIGGERED_DATE.get(key), now):
         log.debug('sunset() already fired today')
         return None
 
@@ -70,7 +71,7 @@ def sunset(zip):
     log.debug('Expected sunset at {}'.format(sunsetdt))
 
     if sunsetdt <= now:
-        _LAST_TRIGGERED_DATE['sunset'] = now
+        _LAST_TRIGGERED_DATE[key] = now
         return sunsetdt
 
     return None
