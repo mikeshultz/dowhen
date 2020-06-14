@@ -5,46 +5,53 @@ from dowhen.common.logger import get_logger
 
 log = get_logger(__name__)
 
-_LAST_TRIGGERED_DT = {}
+_LAST_TRIGGERED_DT = dict()
+
+
+def clear_metrics():
+    """ Clears all metrics """
+    global _LAST_TRIGGERED_DT
+    _LAST_TRIGGERED_DT = dict()
 
 
 def now_is_same(interval):
-    now = datetime.now()
+    """ Check if the last triggered datetime of an interval is the same day as
+    today """
 
     same = False
+    now = datetime.now()
 
     if interval == 'daily':
-        same = same_day(_LAST_TRIGGERED_DT.get('daily'), now)
+        same = same_day(_LAST_TRIGGERED_DT.get(interval), now)
     elif interval == 'hourly':
-        same = same_hour(_LAST_TRIGGERED_DT.get('daily'), now)
+        same = same_hour(_LAST_TRIGGERED_DT.get(interval), now)
     elif interval == 'minutely':
-        same = same_minute(_LAST_TRIGGERED_DT.get('daily'), now)
+        same = same_minute(_LAST_TRIGGERED_DT.get(interval), now)
 
-    if same:
-        return True
+    return same
 
-    return False
+
+def _interval_trigger(interval):
+    """ Generic trigger for datetime intervals """
+    if now_is_same(interval):
+        return None
+    _LAST_TRIGGERED_DT[interval] = datetime.now()
+    return datetime.now()
 
 
 def daily():
     """ Triggers every day """
-    if not now_is_same('daily'):
-        return None
-    return datetime.now()
+    return _interval_trigger('daily')
 
 
 def hourly():
     """ Triggers every hour """
-    if not now_is_same('hourly'):
-        return None
-    return datetime.now()
+    return _interval_trigger('hourly')
 
 
 def minutely():
     """ Triggers every miniute """
-    if not now_is_same('minutely'):
-        return None
-    return datetime.now()
+    return _interval_trigger('minutely')
 
 
 def time(when):
@@ -53,13 +60,13 @@ def time(when):
     now = datetime.now()
     key = 'time-{}:{}:{}'.format(dt.hour, dt.minute, dt.second)
 
-    if dt > now:
+    if now < dt:
         log.debug('{} is in the future.'.format(dt))
         return None
 
     if same_day(_LAST_TRIGGERED_DT.get(key), now):
         log.debug('datetime.time already fired today (@ {}).'.format(
-            _LAST_TRIGGERED_DT[key]
+            _LAST_TRIGGERED_DT.get(key)
         ))
         return None
 
