@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from dateutil.tz import tzoffset, tzlocal
 
 from dowhen.common import same_day
 from dowhen.common.logger import get_logger
@@ -14,7 +15,7 @@ def sunrise(zip):
     global _LAST_TRIGGERED_DATE
 
     key = 'sunrise-{}'.format(zip)
-    now = datetime.now()
+    now = datetime.now(tz=tzlocal())
     forecast = get_forecast(zip=zip)
 
     if not forecast.get('city') or not forecast['city'].get('sunrise'):
@@ -28,7 +29,12 @@ def sunrise(zip):
         log.debug('sunrise() already fired today')
         return None
 
-    sunrisedt = datetime.fromtimestamp(forecast['city']['sunrise'])
+    sunrisedt = (
+        datetime.fromtimestamp(
+            forecast['city']['sunrise'] + forecast['city'].get('timezone', 0),
+            tz=tzlocal()
+        )
+    )
 
     log.debug('Expected sunrise at {}'.format(sunrisedt))
 
@@ -50,7 +56,7 @@ def sunset(zip):
     global _LAST_TRIGGERED_DATE
 
     key = 'sunset-{}'.format(zip)
-    now = datetime.now()
+    now = datetime.now(tz=tzlocal())
     forecast = get_forecast(zip=zip)
 
     if not forecast.get('city') or not forecast['city'].get('sunset'):
@@ -64,8 +70,14 @@ def sunset(zip):
         log.debug('sunset() already fired today')
         return None
 
-    sunrisedt = datetime.fromtimestamp(forecast['city']['sunrise'])
-    sunsetdt = datetime.fromtimestamp(forecast['city']['sunset'])
+    sunrisedt = datetime.fromtimestamp(
+        forecast['city']['sunrise'] + forecast['city'].get('timezone', 0),
+        tz=tzlocal()
+    )
+    sunsetdt = datetime.fromtimestamp(
+        forecast['city']['sunset'] + forecast['city'].get('timezone', 0),
+        tz=tzlocal()
+    )
 
     log.debug('Expected sunrise at {}'.format(sunrisedt))
     log.debug('Expected sunset at {}'.format(sunsetdt))
