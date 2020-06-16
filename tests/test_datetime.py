@@ -5,29 +5,21 @@ from freezegun import freeze_time
 
 from dowhen.when.datetime import clear_metrics, daily, hourly, minutely, time
 
-YEAR = 2020
-MONTH = 6
-DAY = 11
-
-# Datetimes
-ONE_AM = datetime.datetime(year=YEAR, month=MONTH, day=DAY, hour=1, minute=0,
-                           second=0)
-ONE_PM = datetime.datetime(year=YEAR, month=MONTH, day=DAY, hour=13, minute=0,
-                           second=0)
-TWELVE_FIFTY_NINE_AM = datetime.datetime(year=YEAR, month=MONTH, day=DAY,
-                                         hour=0, minute=59, second=0)
-TWELVE_FIFTY_NINE_PM = datetime.datetime(year=YEAR, month=MONTH, day=DAY,
-                                         hour=12, minute=59, second=0)
-FIVE_AM = datetime.datetime(year=YEAR, month=MONTH, day=DAY, hour=5, minute=0,
-                            second=0)
-FIVE_PM = datetime.datetime(year=YEAR, month=MONTH, day=DAY, hour=17, minute=0,
-                            second=0)
-
-# Intervals
-ONE_DAY = datetime.timedelta(hours=24)
-ONE_HOUR = datetime.timedelta(hours=1)
-ONE_MINUTE = datetime.timedelta(minutes=1)
-TEN_SECONDS = datetime.timedelta(seconds=10)
+from .const import (
+    YEAR,
+    MONTH,
+    DAY,
+    ONE_AM,
+    ONE_PM,
+    TWELVE_FIFTY_NINE_AM,
+    TWELVE_FIFTY_NINE_PM,
+    FIVE_AM,
+    FIVE_PM,
+    ONE_DAY,
+    ONE_HOUR,
+    ONE_MINUTE,
+    TEN_SECONDS,
+)
 
 
 def test_datetime_time():
