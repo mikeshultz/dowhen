@@ -4,7 +4,7 @@ from dowhen.trigger import get_triggers
 from dowhen.do import Scheduler, load_do
 from dowhen.when import load_when
 from dowhen.config import config
-from dowhen.common import getint
+from dowhen.common import getint, local_now
 from dowhen.common.logger import get_logger
 
 log = get_logger(__name__)
@@ -38,7 +38,7 @@ def run_daemon():
     with config() as conf:
         log.debug('config()')
         while True:
-            log.debug('--tick {}'.format(datetime.now()))
+            log.debug('--tick {}'.format(local_now()))
 
             try:
                 triggers = get_triggers()

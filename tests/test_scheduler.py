@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from dowhen.common import local_now
 from dowhen.do.util import Scheduler
 
 DEVICE_ON = 'wemo.on'
@@ -13,9 +14,9 @@ def test_scheduler():
 
     s = Scheduler()
 
-    one_time = datetime.now() + timedelta(minutes=15)
-    two_time = datetime.now() + timedelta(minutes=20)
-    three_time = datetime.now() + timedelta(minutes=25)
+    one_time = local_now() + timedelta(minutes=15)
+    two_time = local_now() + timedelta(minutes=20)
+    three_time = local_now() + timedelta(minutes=25)
 
     # These stack, and the final on should prevail
     s.add(one_time, DEVICE_ON, {'mac': DEVICE_ONE})

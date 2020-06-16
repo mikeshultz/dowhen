@@ -1,5 +1,7 @@
 import re
 from datetime import date, datetime
+from dateutil.parser import parse
+from dateutil.tz import tzlocal
 
 MAC_STANDARD_PATTERN = r'^[0-9A-F]{2}\:[0-9A-F]{2}\:[0-9A-F]{2}\:[0-9A-F]{2}\:[0-9A-F]{2}\:[0-9A-F]{2}$'
 MAC_WEMO_PATTERN = r'^[0-9A-F]{12}$'
@@ -79,3 +81,19 @@ def any_in_any(a, b):
         if x in b:
             return True
     return False
+
+
+def local_now():
+    """ Get the current date and time in the local timezone """
+    return datetime.now(tz=tzlocal())
+
+
+def local_time_parse(ts):
+    """ Parse a time string using the local timezone """
+    dt = parse(ts)
+
+    # If not timezone was in the string, use the local timezone
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=tzlocal())
+
+    return dt

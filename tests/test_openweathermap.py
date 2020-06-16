@@ -1,10 +1,9 @@
 import json
-from datetime import tzinfo, datetime
+from datetime import datetime
 from unittest.mock import patch
 from freezegun import freeze_time
 
 from dowhen.when.openweathermap import sunrise
-from dowhen.when.openweathermap.config import OWM_DATE_FORMAT
 
 from .const import ZIP_1, ONE_AM, FIVE_AM, ONE_HOUR
 

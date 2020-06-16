@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from dateutil.tz import tzoffset, tzlocal
 
-from dowhen.common import same_day
+from dowhen.common import same_day, local_now
 from dowhen.common.logger import get_logger
 from dowhen.when.openweathermap.owmapi import get_forecast
 
@@ -15,7 +15,7 @@ def sunrise(zip):
     global _LAST_TRIGGERED_DATE
 
     key = 'sunrise-{}'.format(zip)
-    now = datetime.now(tz=tzlocal())
+    now = local_now()
     forecast = get_forecast(zip=zip)
 
     if not forecast.get('city') or not forecast['city'].get('sunrise'):
@@ -56,7 +56,7 @@ def sunset(zip):
     global _LAST_TRIGGERED_DATE
 
     key = 'sunset-{}'.format(zip)
-    now = datetime.now(tz=tzlocal())
+    now = local_now()
     forecast = get_forecast(zip=zip)
 
     if not forecast.get('city') or not forecast['city'].get('sunset'):

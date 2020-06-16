@@ -1,9 +1,7 @@
 import datetime
-from dateutil.parser import parse
-from dateutil.tz import tzlocal
-from unittest.mock import patch
 from freezegun import freeze_time
 
+from dowhen.common import local_time_parse
 from dowhen.when.datetime import clear_metrics, daily, hourly, minutely, time
 
 from .const import (
@@ -11,13 +9,9 @@ from .const import (
     MONTH,
     DAY,
     ONE_AM,
-    ONE_PM,
     TWELVE_FIFTY_NINE_AM,
-    TWELVE_FIFTY_NINE_PM,
     FIVE_AM,
-    FIVE_PM,
     ONE_DAY,
-    ONE_HOUR,
     ONE_MINUTE,
     TEN_SECONDS,
 )
@@ -28,7 +22,7 @@ def test_datetime_time():
 
     # 1:00 AM
     time1 = '{}-{}-{} 01:00:00'.format(YEAR, MONTH, DAY)
-    time1_dt = parse(time1).replace(tzinfo=tzlocal())
+    time1_dt = local_time_parse(time1)
 
     # One minute before
     with freeze_time(TWELVE_FIFTY_NINE_AM):
@@ -62,12 +56,12 @@ def test_datetime_time_continuity():
 
     # 1:00 AM
     time1 = '01:00:00'
-    time1_dt = parse('{}-{}-{} {}'.format(
+    time1_dt = local_time_parse('{}-{}-{} {}'.format(
         TWELVE_FIFTY_NINE_AM.year,
         TWELVE_FIFTY_NINE_AM.month,
         TWELVE_FIFTY_NINE_AM.day,
         time1
-    )).replace(tzinfo=tzlocal())
+    ))
 
     # One minute before
     with freeze_time(TWELVE_FIFTY_NINE_AM):
