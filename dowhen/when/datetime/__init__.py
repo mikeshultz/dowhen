@@ -1,5 +1,6 @@
 from datetime import datetime
 from dateutil.parser import parse
+from dateutil.tz import tzlocal
 from dowhen.common import same_day, same_hour, same_minute
 from dowhen.common.logger import get_logger
 
@@ -19,7 +20,7 @@ def now_is_same(interval):
     today """
 
     same = False
-    now = datetime.now()
+    now = datetime.now(tz=tzlocal())
 
     if interval == 'daily':
         same = same_day(_LAST_TRIGGERED_DT.get(interval), now)
@@ -35,8 +36,8 @@ def _interval_trigger(interval):
     """ Generic trigger for datetime intervals """
     if now_is_same(interval):
         return None
-    _LAST_TRIGGERED_DT[interval] = datetime.now()
-    return datetime.now()
+    _LAST_TRIGGERED_DT[interval] = datetime.now(tz=tzlocal())
+    return _LAST_TRIGGERED_DT[interval]
 
 
 def daily():
@@ -56,8 +57,8 @@ def minutely():
 
 def time(when):
     """ Triggers when the time matches t """
-    dt = parse(when)
-    now = datetime.now()
+    dt = parse(when).replace(tzinfo=tzlocal())
+    now = datetime.now(tz=tzlocal())
     key = 'time-{}:{}:{}'.format(dt.hour, dt.minute, dt.second)
 
     if now < dt:

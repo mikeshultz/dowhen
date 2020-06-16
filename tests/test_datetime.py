@@ -1,5 +1,6 @@
 import datetime
 from dateutil.parser import parse
+from dateutil.tz import tzlocal
 from unittest.mock import patch
 from freezegun import freeze_time
 
@@ -27,7 +28,7 @@ def test_datetime_time():
 
     # 1:00 AM
     time1 = '{}-{}-{} 01:00:00'.format(YEAR, MONTH, DAY)
-    time1_dt = parse(time1)
+    time1_dt = parse(time1).replace(tzinfo=tzlocal())
 
     # One minute before
     with freeze_time(TWELVE_FIFTY_NINE_AM):
@@ -66,7 +67,7 @@ def test_datetime_time_continuity():
         TWELVE_FIFTY_NINE_AM.month,
         TWELVE_FIFTY_NINE_AM.day,
         time1
-    ))
+    )).replace(tzinfo=tzlocal())
 
     # One minute before
     with freeze_time(TWELVE_FIFTY_NINE_AM):
