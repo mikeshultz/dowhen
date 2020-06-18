@@ -14,56 +14,49 @@ DEFAULT_TICK = 30
 
 def when(name, kwargs):
     op = load_when(name)
-    func = op['func']
+    func = op["func"]
 
-    log.debug('Calling {} with kwargs: {}'.format(name, kwargs))
+    log.debug("Calling {} with kwargs: {}".format(name, kwargs))
 
     return func(**kwargs)
 
 
 def do(name, kwargs):
     op = load_do(name)
-    func = op['func']
+    func = op["func"]
 
-    log.debug('Calling {} with kwargs: {}'.format(name, kwargs))
+    log.debug("Calling {} with kwargs: {}".format(name, kwargs))
 
     return func(**kwargs)
 
 
 def run_daemon():
-    log.debug('run_daemon()')
+    log.debug("run_daemon()")
 
     scheduler = Scheduler()
 
     with config() as conf:
-        log.debug('config()')
+        log.debug("config()")
         while True:
-            log.debug('--tick {}'.format(local_now()))
+            log.debug("--tick {}".format(local_now()))
 
             try:
                 triggers = get_triggers()
 
                 for trig in triggers:
-                    trigger_when = when(
-                        trig['when']['name'],
-                        trig['when'].get('args')
-                    )
+                    trigger_when = when(trig["when"]["name"], trig["when"].get("args"))
 
                     if trigger_when:
-                        for action in trig['do']:
+                        for action in trig["do"]:
                             scheduler.add(
-                                trigger_when,
-                                action['name'],
-                                action.get('args')
+                                trigger_when, action["name"], action.get("args")
                             )
 
-                log.debug('Scheduler has {} actions'.format(
-                    len(scheduler.schedule)
-                ))
+                log.debug("Scheduler has {} actions".format(len(scheduler.schedule)))
 
                 schedule = scheduler.finalize()
 
-                log.info('Will perform {} actions'.format(len(schedule)))
+                log.info("Will perform {} actions".format(len(schedule)))
 
                 for event in schedule:
                     do(event[1], event[2])
@@ -71,4 +64,4 @@ def run_daemon():
             except Exception:
                 log.exception("Unhandled exception in daemon")
 
-            time.sleep(getint(conf, 'tick', DEFAULT_TICK))
+            time.sleep(getint(conf, "tick", DEFAULT_TICK))

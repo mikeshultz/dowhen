@@ -21,33 +21,33 @@ def test_datetime_time():
     """ Test the datetime when module's time trigger """
 
     # 1:00 AM
-    time1 = '{}-{}-{} 01:00:00'.format(YEAR, MONTH, DAY)
+    time1 = "{}-{}-{} 01:00:00".format(YEAR, MONTH, DAY)
     time1_dt = local_time_parse(time1)
 
     # One minute before
     with freeze_time(TWELVE_FIFTY_NINE_AM):
         when = time(time1)
-        assert(when is None)
+        assert when is None
 
     clear_metrics()
 
     # Same minute
     with freeze_time(ONE_AM):
         when = time(time1)
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == time1_dt)
-        assert(when > TWELVE_FIFTY_NINE_AM)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == time1_dt
+        assert when > TWELVE_FIFTY_NINE_AM
 
     clear_metrics()
 
     # After
     with freeze_time(FIVE_AM):
         when = time(time1)
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == time1_dt)
-        assert(when < FIVE_AM)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == time1_dt
+        assert when < FIVE_AM
 
 
 def test_datetime_time_continuity():
@@ -55,31 +55,33 @@ def test_datetime_time_continuity():
     clear_metrics()
 
     # 1:00 AM
-    time1 = '01:00:00'
-    time1_dt = local_time_parse('{}-{}-{} {}'.format(
-        TWELVE_FIFTY_NINE_AM.year,
-        TWELVE_FIFTY_NINE_AM.month,
-        TWELVE_FIFTY_NINE_AM.day,
-        time1
-    ))
+    time1 = "01:00:00"
+    time1_dt = local_time_parse(
+        "{}-{}-{} {}".format(
+            TWELVE_FIFTY_NINE_AM.year,
+            TWELVE_FIFTY_NINE_AM.month,
+            TWELVE_FIFTY_NINE_AM.day,
+            time1,
+        )
+    )
 
     # One minute before
     with freeze_time(TWELVE_FIFTY_NINE_AM):
         when = time(time1)
-        assert(when is None)
+        assert when is None
 
     # Same minute
     with freeze_time(ONE_AM):
         when = time(time1)
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == time1_dt)
-        assert(when > TWELVE_FIFTY_NINE_AM)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == time1_dt
+        assert when > TWELVE_FIFTY_NINE_AM
 
     # Already triggered, shouldn't trigger again
     with freeze_time(FIVE_AM):
         when = time(time1)
-        assert(when is None)
+        assert when is None
 
     ####
     # NEXT DAY
@@ -88,20 +90,20 @@ def test_datetime_time_continuity():
     # One minute before
     with freeze_time(TWELVE_FIFTY_NINE_AM + ONE_DAY):
         when = time(time1)
-        assert(when is None)
+        assert when is None
 
     # Same minute
     with freeze_time(ONE_AM + ONE_DAY):
         when = time(time1)
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == time1_dt + ONE_DAY)
-        assert(when > TWELVE_FIFTY_NINE_AM + ONE_DAY)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == time1_dt + ONE_DAY
+        assert when > TWELVE_FIFTY_NINE_AM + ONE_DAY
 
     # Already triggered, shouldn't trigger again
     with freeze_time(FIVE_AM + ONE_DAY):
         when = time(time1)
-        assert(when is None)
+        assert when is None
 
 
 def test_datetime_daily():
@@ -110,19 +112,19 @@ def test_datetime_daily():
 
     with freeze_time(TWELVE_FIFTY_NINE_AM):
         when = daily()
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == TWELVE_FIFTY_NINE_AM)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == TWELVE_FIFTY_NINE_AM
 
     # Already triggered, shouldn't trigger again
     with freeze_time(ONE_AM):
         when = daily()
-        assert(when is None)
+        assert when is None
 
     # Already triggered, shouldn't trigger again
     with freeze_time(FIVE_AM):
         when = daily()
-        assert(when is None)
+        assert when is None
 
     ####
     # NEXT DAY
@@ -130,19 +132,19 @@ def test_datetime_daily():
 
     with freeze_time(TWELVE_FIFTY_NINE_AM + ONE_DAY):
         when = daily()
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == TWELVE_FIFTY_NINE_AM + ONE_DAY)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == TWELVE_FIFTY_NINE_AM + ONE_DAY
 
     # Already triggered, shouldn't trigger again
     with freeze_time(ONE_AM + ONE_DAY):
         when = daily()
-        assert(when is None)
+        assert when is None
 
     # Already triggered, shouldn't trigger again
     with freeze_time(FIVE_AM + ONE_DAY):
         when = daily()
-        assert(when is None)
+        assert when is None
 
 
 def test_datetime_hourly():
@@ -151,13 +153,13 @@ def test_datetime_hourly():
 
     with freeze_time(TWELVE_FIFTY_NINE_AM - ONE_MINUTE):
         when = hourly()
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == TWELVE_FIFTY_NINE_AM - ONE_MINUTE)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == TWELVE_FIFTY_NINE_AM - ONE_MINUTE
 
     with freeze_time(TWELVE_FIFTY_NINE_AM):
         when = hourly()
-        assert(when is None)
+        assert when is None
 
     ####
     # NEXT HOUR
@@ -165,14 +167,14 @@ def test_datetime_hourly():
 
     with freeze_time(ONE_AM):
         when = hourly()
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == ONE_AM)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == ONE_AM
 
     # Already triggered, shouldn't trigger again
     with freeze_time(ONE_AM + ONE_MINUTE):
         when = hourly()
-        assert(when is None)
+        assert when is None
 
 
 def test_datetime_minutely():
@@ -181,21 +183,21 @@ def test_datetime_minutely():
 
     with freeze_time(ONE_AM):
         when = minutely()
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == ONE_AM)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == ONE_AM
 
     with freeze_time(ONE_AM + TEN_SECONDS):
         when = minutely()
-        assert(when is None)
+        assert when is None
 
     with freeze_time(ONE_AM + ONE_MINUTE):
         when = minutely()
-        assert(when is not None)
-        assert(isinstance(when, datetime.datetime))
-        assert(when == ONE_AM + ONE_MINUTE)
+        assert when is not None
+        assert isinstance(when, datetime.datetime)
+        assert when == ONE_AM + ONE_MINUTE
 
     # Already triggered, shouldn't trigger again
     with freeze_time(ONE_AM + ONE_MINUTE):
         when = minutely()
-        assert(when is None)
+        assert when is None

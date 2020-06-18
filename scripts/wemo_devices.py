@@ -6,11 +6,11 @@ def main():
     devices = discover_wemo()
 
     for dev in devices:
-        print("[Wemo {}] {}: {}".format(
-            dev.device_type,
-            dev.name,
-            normalize_mac_address(dev.mac)
-        ))
+        print(
+            "[Wemo {}] {}: {}".format(
+                dev.device_type, dev.name, normalize_mac_address(dev.mac)
+            )
+        )
 
 
 if __name__ == "__main__":

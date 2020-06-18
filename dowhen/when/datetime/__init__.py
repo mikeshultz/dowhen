@@ -22,11 +22,11 @@ def now_is_same(interval):
     same = False
     now = local_now()
 
-    if interval == 'daily':
+    if interval == "daily":
         same = same_day(_LAST_TRIGGERED_DT.get(interval), now)
-    elif interval == 'hourly':
+    elif interval == "hourly":
         same = same_hour(_LAST_TRIGGERED_DT.get(interval), now)
-    elif interval == 'minutely':
+    elif interval == "minutely":
         same = same_minute(_LAST_TRIGGERED_DT.get(interval), now)
 
     return same
@@ -42,33 +42,35 @@ def _interval_trigger(interval):
 
 def daily():
     """ Triggers every day """
-    return _interval_trigger('daily')
+    return _interval_trigger("daily")
 
 
 def hourly():
     """ Triggers every hour """
-    return _interval_trigger('hourly')
+    return _interval_trigger("hourly")
 
 
 def minutely():
     """ Triggers every miniute """
-    return _interval_trigger('minutely')
+    return _interval_trigger("minutely")
 
 
 def time(when):
     """ Triggers when the time matches t """
     dt = parse(when).replace(tzinfo=tzlocal())
     now = local_now()
-    key = 'time-{}:{}:{}'.format(dt.hour, dt.minute, dt.second)
+    key = "time-{}:{}:{}".format(dt.hour, dt.minute, dt.second)
 
     if now < dt:
-        log.debug('{} is in the future.'.format(dt))
+        log.debug("{} is in the future.".format(dt))
         return None
 
     if same_day(_LAST_TRIGGERED_DT.get(key), now):
-        log.debug('datetime.time already fired today (@ {}).'.format(
-            _LAST_TRIGGERED_DT.get(key)
-        ))
+        log.debug(
+            "datetime.time already fired today (@ {}).".format(
+                _LAST_TRIGGERED_DT.get(key)
+            )
+        )
         return None
 
     _LAST_TRIGGERED_DT[key] = now
@@ -77,24 +79,12 @@ def time(when):
 
 
 CATALOG = {
-    'daily': {
-        'name': 'Daily',
-        'description': daily.__doc__,
-        'func': daily,
+    "daily": {"name": "Daily", "description": daily.__doc__, "func": daily,},
+    "hourly": {"name": "Hourly", "description": hourly.__doc__, "func": hourly,},
+    "minutely": {
+        "name": "Minutely",
+        "description": minutely.__doc__,
+        "func": minutely,
     },
-    'hourly': {
-        'name': 'Hourly',
-        'description': hourly.__doc__,
-        'func': hourly,
-    },
-    'minutely': {
-        'name': 'Minutely',
-        'description': minutely.__doc__,
-        'func': minutely,
-    },
-    'time': {
-        'name': 'Time',
-        'description': time.__doc__,
-        'func': time,
-    },
+    "time": {"name": "Time", "description": time.__doc__, "func": time,},
 }

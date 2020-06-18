@@ -12,14 +12,12 @@ TEST_JASON_FORECAST = """{"cod": "200", "message": 0, "cnt": 40, "list": [{"dt":
 
 def generate_sunrise(dt):
     obj = json.loads(TEST_JASON_FORECAST)
-    obj['city']['sunrise'] = datetime.timestamp(
-        dt
-    )
-    obj['city']['timezone'] = 0
+    obj["city"]["sunrise"] = datetime.timestamp(dt)
+    obj["city"]["timezone"] = 0
     return obj
 
 
-@patch('dowhen.when.openweathermap.get_forecast', autospec=True)
+@patch("dowhen.when.openweathermap.get_forecast", autospec=True)
 def test_owm_sunrise(mock_get_forecast):
     """ Test the Open Weather Map sunrise trigger """
     mock_get_forecast.return_value = generate_sunrise(FIVE_AM)

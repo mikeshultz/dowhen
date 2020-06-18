@@ -9,13 +9,11 @@ log = get_logger(__name__)
 
 
 def create_parser():
-    parser = ArgumentParser(
-        description="A conditional execution system and scheduler."
+    parser = ArgumentParser(description="A conditional execution system and scheduler.")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="Show extra debugging information"
     )
-    parser.add_argument('-d', '--debug', action='store_true',
-                        help="Show extra debugging information")
-    parser.add_argument('command', metavar='COMMAND',
-                        help="Subocmmand (e.g. daemon)")
+    parser.add_argument("command", metavar="COMMAND", help="Subocmmand (e.g. daemon)")
     return parser
 
 
@@ -34,8 +32,8 @@ def main(argv=None):
     if args.debug:
         set_level(logging.DEBUG)
 
-    log.debug(' '.join(sys.argv))
+    log.debug(" ".join(sys.argv))
 
-    if args.command == 'daemon':
-        log.info('Running daemon...')
+    if args.command == "daemon":
+        log.info("Running daemon...")
         run_daemon()

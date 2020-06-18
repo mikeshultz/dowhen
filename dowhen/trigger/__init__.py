@@ -17,4 +17,4 @@ from dowhen.config import config
 
 def get_triggers():
     with config() as conf:
-        return conf.get('triggers')
+        return conf.get("triggers")

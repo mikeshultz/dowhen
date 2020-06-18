@@ -10,7 +10,8 @@ _device_cache = []
 _device_time = None
 
 
-class DeviceNotFound(Exception): pass
+class DeviceNotFound(Exception):
+    pass
 
 
 def discover_wemo():

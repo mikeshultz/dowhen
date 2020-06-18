@@ -8,10 +8,10 @@ def get_root():
     global _LOGGER, _CONSOLE_HANDLER
 
     if _LOGGER is None:
-        _LOGGER = logging.getLogger('dowhen')
+        _LOGGER = logging.getLogger("dowhen")
         _CONSOLE_HANDLER = logging.StreamHandler()
 
-        fmt = logging.Formatter('%(levelname)8s %(message)s')
+        fmt = logging.Formatter("%(levelname)8s %(message)s")
         _CONSOLE_HANDLER.setFormatter(fmt)
 
         _CONSOLE_HANDLER.setLevel(logging.INFO)
@@ -28,7 +28,7 @@ def set_level(log_level):
     root = get_root()
     _LOGGER.setLevel(log_level)
     _CONSOLE_HANDLER.setLevel(log_level)
-    root.debug('Set log level to: {}'.format(log_level))
+    root.debug("Set log level to: {}".format(log_level))
 
 
 def get_logger(name):
