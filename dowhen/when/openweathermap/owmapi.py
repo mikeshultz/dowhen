@@ -58,6 +58,6 @@ def get_forecast(zip=DEFAULT_ZIP, country_code=DEFAULT_COUNTRY_CODE):
 
     else:
         FORECAST_CACHE_TIME = None
-        log.error('Failed to fetch OWM data')
+        log.error("Failed to fetch OWM data")
 
     return FORECAST_CACHE
