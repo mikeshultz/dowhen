@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dateutil.tz import tzlocal
 from dowhen.common import local_now
 from dowhen.common.logger import get_logger
@@ -20,7 +20,7 @@ FORECAST_CACHE_DURATION = timedelta(minutes=5)
 
 
 def parse_owm_date(v):
-    return datetime.strptime(v, OWM_DATE_FORMAT).replace(tzinfo=tzlocal())
+    return datetime.strptime(v, OWM_DATE_FORMAT).replace(tzinfo=timezone.utc)
 
 
 def fetch_forecast_data(zip, country_code):
