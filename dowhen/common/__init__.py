@@ -3,8 +3,8 @@ from datetime import date, datetime
 from dateutil.parser import parse
 from dateutil.tz import tzlocal
 
-MAC_STANDARD_PATTERN = r'^[0-9A-F]{2}\:[0-9A-F]{2}\:[0-9A-F]{2}\:[0-9A-F]{2}\:[0-9A-F]{2}\:[0-9A-F]{2}$'
-MAC_WEMO_PATTERN = r'^[0-9A-F]{12}$'
+MAC_STANDARD_PATTERN = r'^[0-9A-Fa-f]{2}\:[0-9A-Fa-f]{2}\:[0-9A-Fa-f]{2}\:[0-9A-Fa-f]{2}\:[0-9A-Fa-f]{2}\:[0-9A-Fa-f]{2}$'
+MAC_WEMO_PATTERN = r'^[0-9A-Fa-f]{12}$'
 
 
 def getint(d, k, default=None):
@@ -20,14 +20,14 @@ def getint(d, k, default=None):
 def normalize_mac_address(mac):
     assert type(mac) == str, "Invalid mac type: {}".format(type(mac))
     if re.match(MAC_STANDARD_PATTERN, mac):
-        return mac
+        return mac.upper()
     elif re.match(MAC_WEMO_PATTERN, mac):
         parts = []
         for i in range(0, 12):
             if i > 0 and i % 2 == 0:
                 parts.append(':')
             parts.append(mac[i])
-        return ''.join(parts)
+        return ''.join(parts).upper()
     else:
         raise ValueError("Unknown mac address format")
 
