@@ -61,10 +61,10 @@ def sunset(zip):
         log.debug("sunset() already fired today @ {}".format(_LAST_TRIGGERED_DATE[key]))
         return None
 
-    sunrisedt = datetime.fromtimestamp(
+    sunrisedt = datetime.utcfromtimestamp(
         forecast["city"]["sunrise"] + forecast["city"].get("timezone", 0)
     ).replace(tzinfo=tzlocal())
-    sunsetdt = datetime.fromtimestamp(
+    sunsetdt = datetime.utcfromtimestamp(
         forecast["city"]["sunset"] + forecast["city"].get("timezone", 0)
     ).replace(tzinfo=tzlocal())
 
