@@ -1,3 +1,5 @@
+import pytest
+
 from dowhen.when.openweathermap.owmapi import fetch_forecast_data, get_forecast
 
 from .const import COUNTRY_CODE_1, CITY_1, ZIP_1
@@ -26,11 +28,13 @@ def assert_owmapi_results(results):
         assert item["main"].get("temp_max") is not None
 
 
+@pytest.mark.skip(reason="Can't test without an API key")
 def test_owmapi_fetch():
     """ Test the Open Weather Map API forecast fetch """
     assert_owmapi_results(fetch_forecast_data(ZIP_1, COUNTRY_CODE_1))
 
 
+@pytest.mark.skip(reason="Can't test without an API key")
 def test_owmapi_forecast():
     """ Test the Open Weather Map API forecast call """
     result1 = get_forecast(ZIP_1, COUNTRY_CODE_1)
