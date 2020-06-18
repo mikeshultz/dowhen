@@ -1,7 +1,7 @@
 import pywemo
 from datetime import datetime, timedelta
 
-from dowhen.common import normalize_mac_address
+from dowhen.common import normalize_mac_address, local_now
 
 
 CACHE_DURATION = timedelta(seconds=900)
@@ -17,11 +17,11 @@ def discover_wemo():
     """ Discover Wemo devices on the network """
     global _device_time, _device_cache
 
-    if _device_time and _device_time - datetime.now() <= CACHE_DURATION:
+    if _device_time and _device_time - local_now() <= CACHE_DURATION:
         return _device_cache
 
     _device_cache = pywemo.discover_devices()
-    _device_time = datetime.now()
+    _device_time = local_now()
 
     return _device_cache
 

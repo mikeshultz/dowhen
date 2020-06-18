@@ -1,9 +1,10 @@
 import time
+from datetime import datetime
 from dowhen.trigger import get_triggers
-from dowhen.do import load_do
+from dowhen.do import Scheduler, load_do
 from dowhen.when import load_when
 from dowhen.config import config
-from dowhen.common import getint
+from dowhen.common import getint, local_now
 from dowhen.common.logger import get_logger
 
 log = get_logger(__name__)
@@ -31,26 +32,41 @@ def do(name, kwargs):
 
 def run_daemon():
     log.debug('run_daemon()')
+
+    scheduler = Scheduler()
+
     with config() as conf:
         log.debug('config()')
         while True:
-            log.debug('--tick')
+            log.debug('--tick {}'.format(local_now()))
 
             try:
                 triggers = get_triggers()
 
                 for trig in triggers:
-                    triggered = when(
+                    trigger_when = when(
                         trig['when']['name'],
                         trig['when'].get('args')
                     )
 
-                    if triggered:
-                        log.info('{} triggered!'.format(trig['when']['name']))
+                    if trigger_when:
+                        for action in trig['do']:
+                            scheduler.add(
+                                trigger_when,
+                                action['name'],
+                                action.get('args')
+                            )
 
-                        if trig['do']:
-                            for work in trig['do']:
-                                do(work['name'], work['args'])
+                log.debug('Scheduler has {} actions'.format(
+                    len(scheduler.schedule)
+                ))
+
+                schedule = scheduler.finalize()
+
+                log.info('Will perform {} actions'.format(len(schedule)))
+
+                for event in schedule:
+                    do(event[1], event[2])
 
             except Exception:
                 log.exception("Unhandled exception in daemon")

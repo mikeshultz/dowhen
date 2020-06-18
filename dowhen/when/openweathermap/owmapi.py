@@ -1,5 +1,7 @@
 import requests
 from datetime import datetime
+from dateutil.tz import tzlocal
+from dowhen.common import local_now
 from dowhen.common.logger import get_logger
 
 from dowhen.when.openweathermap.config import (
@@ -17,7 +19,7 @@ FORECAST_CACHE_TIME = None
 
 
 def parse_owm_date(v):
-    return datetime.strptime(v, OWM_DATE_FORMAT)
+    return datetime.strptime(v, OWM_DATE_FORMAT).replace(tzinfo=tzlocal())
 
 
 def fetch_forecast_data(zip, country_code):
@@ -35,7 +37,7 @@ def get_forecast(zip=DEFAULT_ZIP, country_code=DEFAULT_COUNTRY_CODE):
     """ Get the 5 day forecast for a zip """
     global FORECAST_CACHE, FORECAST_CACHE_TIME
 
-    if FORECAST_CACHE is not None and FORECAST_CACHE_TIME > datetime.now():
+    if FORECAST_CACHE is not None and FORECAST_CACHE_TIME > local_now():
         return FORECAST_CACHE
 
     FORECAST_CACHE = fetch_forecast_data(zip, country_code)

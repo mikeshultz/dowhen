@@ -1,3 +1,4 @@
 flake8>=3.8.2
 pytest>=5.4.2
 black>=19.10b0
+freezegun>=0.3.15
