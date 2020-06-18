@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
-from dateutil.tz import tzoffset, tzlocal
+from datetime import datetime
+from dateutil.tz import tzlocal
 
 from dowhen.common import same_day, local_now
 from dowhen.common.logger import get_logger
@@ -29,9 +29,9 @@ def sunrise(zip):
         )
         return None
 
-    sunrisedt = datetime.fromtimestamp(
-        forecast["city"]["sunrise"] + forecast["city"].get("timezone", 0), tz=tzlocal()
-    )
+    sunrisedt = datetime.utcfromtimestamp(
+        forecast["city"]["sunrise"] + forecast["city"].get("timezone", 0)
+    ).replace(tzinfo=tzlocal())
 
     log.debug("Expected sunrise at {}".format(sunrisedt))
 
@@ -62,11 +62,11 @@ def sunset(zip):
         return None
 
     sunrisedt = datetime.fromtimestamp(
-        forecast["city"]["sunrise"] + forecast["city"].get("timezone", 0), tz=tzlocal()
-    )
+        forecast["city"]["sunrise"] + forecast["city"].get("timezone", 0)
+    ).replace(tzinfo=tzlocal())
     sunsetdt = datetime.fromtimestamp(
-        forecast["city"]["sunset"] + forecast["city"].get("timezone", 0), tz=tzlocal()
-    )
+        forecast["city"]["sunset"] + forecast["city"].get("timezone", 0)
+    ).replace(tzinfo=tzlocal())
 
     log.debug("Expected sunrise at {}".format(sunrisedt))
     log.debug("Expected sunset at {}".format(sunsetdt))

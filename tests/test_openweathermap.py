@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import patch
 from freezegun import freeze_time
 
@@ -20,7 +20,9 @@ def generate_sunrise(dt):
 @patch("dowhen.when.openweathermap.get_forecast", autospec=True)
 def test_owm_sunrise(mock_get_forecast):
     """ Test the Open Weather Map sunrise trigger """
-    mock_get_forecast.return_value = generate_sunrise(FIVE_AM)
+    mock_get_forecast.return_value = generate_sunrise(
+        FIVE_AM.replace(tzinfo=timezone.utc)
+    )
 
     with freeze_time(ONE_AM):
         tres = sunrise(ZIP_1)
