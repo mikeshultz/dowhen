@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.tz import tzlocal
 from dowhen.common import local_now
 from dowhen.common.logger import get_logger
@@ -16,6 +16,7 @@ log = get_logger(__name__)
 
 FORECAST_CACHE = None
 FORECAST_CACHE_TIME = None
+FORECAST_CACHE_DURATION = timedelta(minutes=5)
 
 
 def parse_owm_date(v):
@@ -33,17 +34,30 @@ def get_forecast(zip=DEFAULT_ZIP, country_code=DEFAULT_COUNTRY_CODE):
     """ Get the 5 day forecast for a zip """
     global FORECAST_CACHE, FORECAST_CACHE_TIME
 
-    if FORECAST_CACHE is not None and FORECAST_CACHE_TIME > local_now():
+    if (
+        FORECAST_CACHE is not None
+        and FORECAST_CACHE_TIME is not None
+        and FORECAST_CACHE_TIME + FORECAST_CACHE_DURATION > local_now()
+    ):
         return FORECAST_CACHE
 
     FORECAST_CACHE = fetch_forecast_data(zip, country_code)
     forecast_list = FORECAST_CACHE.get("list")
+
     if forecast_list is not None and len(forecast_list) > 0:
+
         date_string = forecast_list[0].get("dt_txt")
+
         if date_string is not None:
             FORECAST_CACHE_TIME = parse_owm_date(date_string)
             log.debug("Set Forecast cache time to {}".format(FORECAST_CACHE_TIME))
+
         else:
+            FORECAST_CACHE_TIME = None
             log.warn("dt_txt has invalid value or does not exist")
+
+    else:
+        FORECAST_CACHE_TIME = None
+        log.error('Failed to fetch OWM data')
 
     return FORECAST_CACHE

@@ -22,6 +22,7 @@ def assert_owmapi_results(results):
     for item in results["list"]:
         # TODO: Fill this out with what we use
         assert item.get("dt") is not None
+        assert item.get("dt_txt") is not None
         assert item.get("main") is not None
         assert type(item["main"]) == dict
         assert item["main"].get("temp_min") is not None
