@@ -51,6 +51,18 @@ def test_same_day():
     assert same_day(ONE_AM, ONE_AM + ONE_HOUR) is True
     assert same_day(ONE_AM, ONE_AM + ONE_DAY) is False
 
+    # A None date should automagically fail
+    assert same_day(None, ONE_AM) is False
+    assert same_day(ONE_AM, None) is False
+
+    # Non-date types should fail
+    assert same_day(1, ONE_AM) is False
+    assert same_day(ONE_AM, 1) is False
+    assert same_day(1.0, ONE_AM) is False
+    assert same_day(ONE_AM, 1.0) is False
+    assert same_day('1', ONE_AM) is False
+    assert same_day(ONE_AM, '1') is False
+
 
 def test_same_hour():
     """ Test the same_hour comparison function """
@@ -59,6 +71,18 @@ def test_same_hour():
     assert same_hour(ONE_AM, ONE_AM + ONE_HOUR) is False
     assert same_hour(ONE_AM, ONE_AM + ONE_DAY) is False
 
+    # A None date should automagically fail
+    assert same_hour(None, ONE_AM) is False
+    assert same_hour(ONE_AM, None) is False
+
+    # Non-date types should fail
+    assert same_hour(1, ONE_AM) is False
+    assert same_hour(ONE_AM, 1) is False
+    assert same_hour(1.0, ONE_AM) is False
+    assert same_hour(ONE_AM, 1.0) is False
+    assert same_hour('1', ONE_AM) is False
+    assert same_hour(ONE_AM, '1') is False
+
 
 def test_same_minute():
     """ Test the same_minute comparison function """
@@ -66,6 +90,18 @@ def test_same_minute():
     assert same_minute(ONE_AM, ONE_AM + ONE_MINUTE) is False
     assert same_minute(ONE_AM, ONE_AM + ONE_HOUR) is False
     assert same_minute(ONE_AM, ONE_AM + ONE_DAY) is False
+
+    # A None date should automagically fail
+    assert same_minute(None, ONE_AM) is False
+    assert same_minute(ONE_AM, None) is False
+
+    # Non-date types should fail
+    assert same_minute(1, ONE_AM) is False
+    assert same_minute(ONE_AM, 1) is False
+    assert same_minute(1.0, ONE_AM) is False
+    assert same_minute(ONE_AM, 1.0) is False
+    assert same_minute('1', ONE_AM) is False
+    assert same_minute(ONE_AM, '1') is False
 
 
 def test_any_in_any():
