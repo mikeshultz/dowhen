@@ -26,7 +26,9 @@ def sunrise(zip):
 
     # Only trigger this once per day
     if same_day(_LAST_TRIGGERED_DATE.get(key), now):
-        log.debug('sunrise() already fired today')
+        log.debug('sunrise() already fired today @ {}'.format(
+            _LAST_TRIGGERED_DATE[key]
+        ))
         return None
 
     sunrisedt = (
@@ -67,7 +69,9 @@ def sunset(zip):
 
     # Only trigger this once per day
     if same_day(_LAST_TRIGGERED_DATE.get(key), now):
-        log.debug('sunset() already fired today')
+        log.debug('sunset() already fired today @ {}'.format(
+            _LAST_TRIGGERED_DATE[key]
+        ))
         return None
 
     sunrisedt = datetime.fromtimestamp(
