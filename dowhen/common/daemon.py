@@ -1,10 +1,11 @@
 import time
 from datetime import datetime
 from dowhen.trigger import get_triggers
-from dowhen.do import Scheduler, load_do
+from dowhen.do import load_do
 from dowhen.when import load_when
 from dowhen.config import config
 from dowhen.common import getint, local_now
+from dowhen.common.scheduler import Scheduler
 from dowhen.common.logger import get_logger
 
 log = get_logger(__name__)
@@ -60,11 +61,11 @@ def run_daemon():
 
                 for event in schedule:
                     try:
-                        do(event[1], event[2])
+                        do(event.name, event.args)
                     except Exception:
                         log.exception(
                             "Exception while attempting to perform action {}({})".format(
-                                event[1], event[2]
+                                event.name, event.args
                             )
                         )
 

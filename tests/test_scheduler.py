@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from dowhen.common import local_now
-from dowhen.do.util import Scheduler
+from dowhen.common.scheduler import Scheduler
 
 DEVICE_ON = "wemo.on"
 DEVICE_OFF = "wemo.off"
@@ -26,5 +26,7 @@ def test_scheduler():
     schedule = s.finalize()
 
     assert len(schedule) == 1
-    assert schedule[0][0] == three_time
-    assert schedule[0][1] == DEVICE_ON
+    assert schedule[0].when == three_time
+    assert schedule[0].name == DEVICE_ON
+    assert type(schedule[0].args) == dict
+    assert schedule[0].args.get("mac") == DEVICE_ONE

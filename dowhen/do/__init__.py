@@ -1,1 +1,1 @@
-from dowhen.do.util import Scheduler, load_do
+from dowhen.do.util import load_do
