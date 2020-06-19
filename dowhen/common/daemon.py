@@ -5,7 +5,7 @@ from dowhen.do import load_do
 from dowhen.when import load_when
 from dowhen.config import config
 from dowhen.common import getint, local_now
-from dowhen.common.scheduler import Scheduler
+from dowhen.common.scheduler import MaxRetriesReached, Scheduler
 from dowhen.common.logger import get_logger
 
 log = get_logger(__name__)
@@ -55,19 +55,32 @@ def run_daemon():
 
                 log.debug("Scheduler has {} actions".format(len(scheduler.schedule)))
 
-                schedule = scheduler.finalize()
+                executing = True
+                while executing:
 
-                log.info("Will perform {} actions".format(len(schedule)))
+                    schedule = scheduler.finalize()
 
-                for event in schedule:
-                    try:
-                        do(event.name, event.args)
-                    except Exception:
-                        log.exception(
-                            "Exception while attempting to perform action {}({})".format(
-                                event.name, event.args
+                    log.info("Will perform {} actions".format(len(schedule)))
+
+                    for event in schedule:
+                        try:
+                            do(event.name, event.args)
+                        except MaxRetriesReached:
+                            log.exception(
+                                "Maximum retries reached for {}({}".format(
+                                    event.name, event.cargs
+                                )
                             )
-                        )
+                        except Exception:
+                            log.exception(
+                                "Exception while attempting to perform action {}({}). Retrying...".format(
+                                    event.name, event.args
+                                )
+                            )
+                            scheduler.retry(event)
+
+                    if len(scheduler.schedule) < 1:
+                        executing = False
 
             except Exception:
                 log.exception("Unhandled exception in daemon")

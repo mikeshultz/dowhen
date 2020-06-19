@@ -4,7 +4,7 @@ from dowhen.common.logger import get_logger
 
 log = get_logger(__name__)
 
-ENABLED_MODULES = ["wemo"]
+ENABLED_MODULES = ["test", "wemo"]
 
 _schedule = []
 

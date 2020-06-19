@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from dowhen.common import local_now
-from dowhen.common.scheduler import Scheduler
+from dowhen.common.scheduler import MaxRetriesReached, Scheduler
 
 DEVICE_ON = "wemo.on"
 DEVICE_OFF = "wemo.off"
@@ -30,3 +30,51 @@ def test_scheduler():
     assert schedule[0].name == DEVICE_ON
     assert type(schedule[0].args) == dict
     assert schedule[0].args.get("mac") == DEVICE_ONE
+
+
+def test_scheduler_max_retries():
+    """ Test max retries on scheduler """
+
+    s = Scheduler()
+
+    when = local_now() + timedelta(minutes=15)
+
+    s.add(when, "test.echo", {"string": "Hello, world!"})
+
+    assert len(s.schedule) == 1
+
+    first_schedule = s.finalize()
+
+    assert len(first_schedule) == 1
+    assert first_schedule[0].retries == 0
+
+    s.retry(first_schedule[0])
+
+    first_schedule = s.finalize()
+
+    assert len(first_schedule) == 1
+    assert first_schedule[0].retries == 1
+
+    s.retry(first_schedule[0])
+
+    first_schedule = s.finalize()
+
+    assert len(first_schedule) == 1
+    assert first_schedule[0].retries == 2
+
+    s.retry(first_schedule[0])
+
+    first_schedule = s.finalize()
+
+    assert len(first_schedule) == 1
+    assert first_schedule[0].retries == 3
+
+    try:
+        s.retry(first_schedule[0])
+        assert False, "Should have raised an exception"
+    except MaxRetriesReached:
+        pass
+    except AssertionError as err:
+        raise err
+    except Exception as err:
+        assert False, "Wrong exception seen: {}".format(err)

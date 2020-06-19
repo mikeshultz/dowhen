@@ -1,8 +1,15 @@
 from dowhen.common import any_in_any
 from dowhen.common.logger import get_logger
 from dowhen.do.util import load_catalog
+from dowhen.config import init_config
 
 log = get_logger(__name__)
+
+DEFAULT_MAX_RETRIES = 3
+
+
+class MaxRetriesReached(Exception):
+    pass
 
 
 def create_call_key(name, args):
@@ -18,11 +25,11 @@ def create_call_key(name, args):
 class Event:
     """ An event to be scheduled """
 
-    def __init__(self, when, name, args, attempt=0):
+    def __init__(self, when, name, args, retries=0):
         self.when = when
         self.name = name
         self.args = args
-        self.attempt = attempt
+        self.retries = retries
 
 
 class Scheduler:
@@ -58,6 +65,18 @@ class Scheduler:
     def add(self, when, name, args=None):
         self.schedule.append(Event(when, name, args))
 
+    def retry(self, event):
+        config = init_config()
+
+        if event.retries >= config.get("max_retries", DEFAULT_MAX_RETRIES):
+            raise MaxRetriesReached(
+                "Maximum retries reached for {}({})".format(event.name, event.args,)
+            )
+
+        event.retries += 1
+
+        self.schedule.append(event)
+
     def sort(self):
         self.schedule = list(sorted(self.schedule, key=lambda x: x.when, reverse=True))
 
@@ -79,7 +98,8 @@ class Scheduler:
 
             # If this is stackable with a previously seen item, skip it
             if stacks and any_in_any(
-                [create_call_key("{}.{}".format(mod, x), item.args) for x in stacks], seen
+                [create_call_key("{}.{}".format(mod, x), item.args) for x in stacks],
+                seen,
             ):
                 continue
 

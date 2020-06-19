@@ -10,6 +10,7 @@ except ImportError:
 
 CONF_DIR = os.environ.get("CONF_DIR", "~/.config/dowhen")
 CONFIG_FILENAME = os.environ.get("CONFIG_FILENAME", "dowhen.yaml")
+CACHED_CONFIG = None
 
 
 def conf_dir():
@@ -25,22 +26,30 @@ def conf_dir():
 
 
 def init_config():
+    """ initialize and load configuration
+
+    Usage
+    -----
+    _conf = init_config()
+    myconfigvar = _conf.get("myconfigvar")
+    """
+    global CACHED_CONFIG
+
     confd = conf_dir()
     conf_file = confd.joinpath(CONFIG_FILENAME)
-    conf = None
 
     # Create new config if one does not exist
     if not conf_file.is_file():
         with conf_file.open("x") as f:
-            conf = {"triggers": []}
-            dump(conf, f, Dumper=Dumper)
+            CACHED_CONFIG = {"triggers": []}
+            dump(CACHED_CONFIG, f, Dumper=Dumper)
 
     # Load existing config
     else:
         with conf_file.open("r") as f:
-            conf = load(f, Loader=Loader)
+            CACHED_CONFIG = load(f, Loader=Loader)
 
-    return conf
+    return CACHED_CONFIG
 
 
 @contextmanager
