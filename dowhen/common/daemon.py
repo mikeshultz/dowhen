@@ -59,7 +59,14 @@ def run_daemon():
                 log.info("Will perform {} actions".format(len(schedule)))
 
                 for event in schedule:
-                    do(event[1], event[2])
+                    try:
+                        do(event[1], event[2])
+                    except Exception:
+                        log.exception(
+                            "Exception while attempting to perform action {}({})".format(
+                                event[1], event[2]
+                            )
+                        )
 
             except Exception:
                 log.exception("Unhandled exception in daemon")
