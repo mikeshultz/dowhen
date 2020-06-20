@@ -37,7 +37,10 @@ def sunrise(zip):
 
     log.debug("{} <= {} == {}".format(sunrisedt, now, sunrisedt <= now))
 
-    if sunrisedt <= now:
+    if not same_day(sunrisedt, now):
+        log.warn("Weather forecast is old.")
+
+    elif sunrisedt <= now:
         _LAST_TRIGGERED_DATE[key] = now
         return sunrisedt
 
@@ -71,7 +74,10 @@ def sunset(zip):
     log.debug("Expected sunrise at {}".format(sunrisedt))
     log.debug("Expected sunset at {}".format(sunsetdt))
 
-    if sunsetdt <= now:
+    if not same_day(sunsetdt, now):
+        log.warn("Weather forecast is old.")
+
+    elif sunsetdt <= now:
         _LAST_TRIGGERED_DATE[key] = now
         return sunsetdt
 
