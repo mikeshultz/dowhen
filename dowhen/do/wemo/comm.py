@@ -2,6 +2,9 @@ import pywemo
 from datetime import datetime, timedelta
 
 from dowhen.common import normalize_mac_address, local_now
+from dowhen.common.logger import get_logger
+
+log = get_logger(__name__)
 
 
 CACHE_DURATION = timedelta(seconds=900)
@@ -29,6 +32,8 @@ def discover_wemo():
 
 def get_device(mac, devices=None):
     """ Get a specific device """
+    global _device_time
+
     if not mac:
         return None
     if not devices:
@@ -37,7 +42,14 @@ def get_device(mac, devices=None):
     normal_mac = normalize_mac_address(mac)
 
     for dev in devices:
-        if normalize_mac_address(dev.mac) == normal_mac:
+        if not dev or dev.mac is None:
+            # Invalidate cache because this is bad
+            _device_time = None
+            log.warn(
+                "Discovered device is missing its MAC address. Invalidating cache."
+            )
+
+        elif normalize_mac_address(dev.mac) == normal_mac:
             return dev
 
     return None
