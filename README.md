@@ -9,13 +9,13 @@ There is (currently) no UI.
 
 #### Generic
 
-    pip3 install --user git+https://github.com/mikeshultz/dowhen.git
+    pipx install git+https://github.com/mikeshultz/dowhen.git
 
 #### Production
 
     useradd dowhen
     sudo -u dowhen bash
-    pip3 install --user git+https://github.com/mikeshultz/dowhen.git
+    pipx install git+https://github.com/mikeshultz/dowhen.git
 
 You may also want to configure a daemon.  You can use the service file in this
 repo as a template.

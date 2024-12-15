@@ -6,4 +6,7 @@ After=doto.service
 Type=simple
 User=dowhen
 Group=dowhen
-ExecStart=/usr/bin/python3 -m dowhen daemon
+ExecStart=/home/dowhen/.local/share/pipx/venvs/dowhen/bin/python -m dowhen daemon
+
+[Install]
+WantedBy=multi-user.target
